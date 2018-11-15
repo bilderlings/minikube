@@ -58,6 +58,7 @@ if [ -x "$(command -v minikube)" ]; then
     sudo rm -fr /var/lib/kubelet
     sudo rm -rf /etc/kubernetes/
     sudo rm /usr/local/bin/minikube
+    sudo rm -fr /var/minikube
 fi
 
 if [ -x "$(command -v kubectl)" ]; then
@@ -110,6 +111,29 @@ echo "#!/usr/bin/env bash" >$HOME/minikube-ctx.sh
 echo "export KUBECONFIG=$HOME/.kube/config.minikube" >>$HOME/minikube-ctx.sh
 echo "export KUBECONTEXT=minikube" >>$HOME/minikube-ctx.sh
 chmod +x $HOME/minikube-ctx.sh
+
+kubectl delete --namespace kube-system secret ca-key-pair || true
+kubectl create --namespace kube-system secret tls ca-key-pair \
+   --cert="$HOME/minikube-ca.crt" \
+   --key="$HOME/minikube-ca.key"
+
+kubectl delete --namespace default PersistentVolume minikube-pv || true
+kubectl create --namespace default -f - << EOF
+kind: PersistentVolume
+apiVersion: v1
+metadata:
+  name: minikube-pv
+  labels:
+    type: local
+spec:
+  capacity:
+    storage: 10Gi
+  accessModes:
+    - ReadWriteOnce
+  hostPath:
+    path: "/var/minikube"
+EOF
+
 set +x
 >&2 echo "minikube setup was successfull, please run ~/minikube-ctx.sh before you will use kubectl, it will set your context accordingly"
 set -x
