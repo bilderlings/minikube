@@ -22,6 +22,7 @@ if [ -x "$(command -v docker)" ]; then
         echo "sudo rm -fr /var/lib/docker"
         echo "sudo apt-get remove docker-ce"
         echo "sudo apt-get install docker-ce=18.06.1~ce~3-0~ubuntu"
+        echo "Close & Open your current terminal after this is done, and rerun make"
         exit -1
     fi
 else
@@ -44,6 +45,7 @@ if [ -x "$(command -v minikube)" ]; then
         echo "Used apt? then please run `sudo apt remove minikube`"
         echo "Simply installed it not in /usr/local/bin?"
         echo "Please run 'sudo rm `which minikube`'"
+        echo "Close & Open your current terminal after this is done and rerun make"
         exit -1
     fi
     sudo minikube stop || true
@@ -66,6 +68,7 @@ if [ -x "$(command -v kubectl)" ]; then
         echo "Used apt? remove it by 'sudo apt-get remove kubectl'"
 	echo "Simply installed it not in /usr/local/bin?"
         echo "Then remove it with 'sudo rm `which kubectl`'"
+        echo "Close & Open your current termina after this is done"
         exit -1
     fi
     sudo rm /usr/local/bin/kubectl

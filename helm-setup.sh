@@ -9,6 +9,7 @@ if [ -x "$(command -v helm)" ]; then
         echo "Already installed helm yourself? please remove it"
         echo "Used apt? please run 'sudo apt remove helm'"
         echo "Simply installed it not in /usr/local/bin? please run 'sudo rm `which helm`'"
+        echo "Close & Open your current termina after this is done"
         exit -1
     fi
     sudo rm /usr/local/bin/helm
@@ -20,6 +21,7 @@ if [ -x "$(command -v tiller)" ]; then
         echo "Already installed tiller yourself? please remove it"
         echo "Used apt? please run 'sudo apt remove tiller'"
         echo "Simply installed it not in /usr/local/bin? please run 'sudo rm `which tiller`'"
+        echo "Close & Open your current termina after this is done"
         exit -1
     fi
     sudo rm /usr/local/bin/tiller
