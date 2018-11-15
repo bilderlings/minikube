@@ -1,0 +1,19 @@
+apiVersion: certmanager.k8s.io/v1alpha1
+kind: Certificate
+metadata:
+  name: swagger-bilderlings-eu-tls
+spec:
+  secretName: swagger-bilderlings-eu-tls
+  issuerRef:
+    name: letsencrypt
+    kind: ClusterIssuer
+  commonName: "swagger.minikube.iamoffice.lv"
+  dnsNames:
+  - "swagger.minikube.iamoffice.lv"
+  acme:
+    config:
+    - dns01:
+        provider: cloudflare
+      domains:
+      - "swagger.minikube.iamoffice.lv"
+
