@@ -2,37 +2,54 @@
 set -x
 set -e
 
+UBUNTU=0
+DOKER_VERSION=18.06.1
+DOCKER_VERSION_UBUNTU=18.06.1~ce~3-0~ubuntu
 if [[ "`gcc --version`" != *ubuntu* ]]
 then
     set +x
-    echo "Docker auto-install works on ubuntu only, sorry mac-ers and non-ubunters"
-    exit -1
+    echo "Docker auto-install works on ubuntu only, sorry"
+    echo "1) Please install docker $DOKER_VERSION~ce version by whatever means you want"
+    echo "2) Install latest version of socat"
+    read -p "Are you ready to proceed (y/n)? " answer
+    case ${answer:0:1} in
+        y|Y )
+            echo Yes
+        ;;
+        * )
+            exit -1
+        ;;
+    esac
+    set -x
+else
+    UBUNTU=1
+    sudo apt-get update
+    # install hidden deps of kubectl
+    sudo apt-get install socat
 fi
-
-sudo apt-get update
 
 if [ -x "$(command -v docker)" ]; then
     echo "Docker exists, skip installation"
-    if [[ "`docker --version`" != *18.06.1* ]]
+    if [[ "`docker --version`" != *$DOCKER_VERSION* ]]
     then
         set +x
-        echo "Your docker version is not 18.06.1 CE: `docker --version` please upgrade/downgrade yourself"
+        echo "Your docker version is not $DOKER_VERSION CE: `docker --version` please upgrade/downgrade yourself"
         echo "NOTE: you will loose containers!, if OK, then execute the following to downgrade/upgrade" 
         echo "sudo service docker stop"
         echo "sudo rm -fr /var/lib/docker"
         echo "sudo apt-get remove docker-ce"
-        echo "sudo apt-get install docker-ce=18.06.1~ce~3-0~ubuntu"
+        echo "sudo apt-get install docker-ce=$DOCKER_VERSION_UBUNTU"
         echo "Close & Open your current terminal after this is done, and rerun make"
         exit -1
     fi
-else
+elif [ "$UBUNTU" -eq 1 ]; then
     echo "Install docker requirements"
     sudo apt-get install apt-transport-https ca-certificates curl software-properties-common
     echo "install docker repo"
     curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -
     sudo add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu bionic stable"
     sudo apt-get update
-    sudo apt-get install docker-ce=18.06.1~ce~3-0~ubuntu
+    sudo apt-get install docker-ce=$DOCKER_VERSION_UBUNTU
 fi
 
 echo "Starting minikube installation"
@@ -48,6 +65,17 @@ if [ -x "$(command -v minikube)" ]; then
         echo "Close & Open your current terminal after this is done and rerun make"
         exit -1
     fi
+    read -p "Going to wipe out your existing minikube installation and settings (y/n)? " answer
+    case ${answer:0:1} in
+        y|Y )
+            echo Yes
+        ;;
+        * )
+            exit -1
+        ;;
+    esac
+    # minikube has no uninstaller, thats why below:)
+    # if you will delete any of the following minikube will fail to reinstall:) super Resilient!
     sudo minikube stop || true
     sudo minikube delete || true
     sudo rm -fr $HOME/.minikube || true
@@ -69,7 +97,7 @@ if [ -x "$(command -v kubectl)" ]; then
         echo "Used apt? remove it by 'sudo apt-get remove kubectl'"
 	echo "Simply installed it not in /usr/local/bin?"
         echo "Then remove it with 'sudo rm `which kubectl`'"
-        echo "Close & Open your current termina after this is done"
+        echo "Close & Open your current terminal after this is done"
         exit -1
     fi
     sudo rm /usr/local/bin/kubectl
@@ -83,9 +111,6 @@ curl -Lo kubectl https://storage.googleapis.com/kubernetes-release/release/v1.12
  chmod +x kubectl && \
  sudo cp kubectl /usr/local/bin/ && \
  rm kubectl
-
-# install hidden deps of kubectl
-sudo apt-get install socat
 
 export MINIKUBE_WANTUPDATENOTIFICATION=false
 export MINIKUBE_WANTREPORTERRORPROMPT=false
