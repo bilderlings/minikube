@@ -16,8 +16,8 @@ if [ -x "$(command -v docker)" ]; then
     if [[ "`docker --version`" != *18.06.1* ]]
     then
         set +x
-        echo "Your docker version is not 18.06.0 CE: `docker --version` please upgrade/downgrade yourself"
-        echo "(NOTE: you will loose containers!, if OK, then execute the following to downgrade/upgrade" 
+        echo "Your docker version is not 18.06.1 CE: `docker --version` please upgrade/downgrade yourself"
+        echo "NOTE: you will loose containers!, if OK, then execute the following to downgrade/upgrade" 
         echo "sudo service docker stop"
         echo "sudo rm -fr /var/lib/docker"
         echo "sudo apt-get remove docker-ce"
@@ -39,7 +39,11 @@ echo "Starting minikube installation"
 if [ -x "$(command -v minikube)" ]; then
     echo "Minikube already exists, performing re-install"
     if [[ "`which minikube`" != "/usr/local/bin/minikube" ]]; then
-        echo "Already installed minikube yourself in non-standard location? please remove it"
+        set +x
+        echo "Already installed minikube yourself in non-standard location or with apt? please remove it"
+        echo "Used apt? then please run `sudo apt remove minikube`"
+        echo "Simply installed it not in /usr/local/bin?"
+        echo "Please run 'sudo rm `which minikube`'"
         exit -1
     fi
     sudo minikube stop || true
@@ -57,7 +61,11 @@ fi
 if [ -x "$(command -v kubectl)" ]; then
     echo "Kubectl already exists, performing re-install"
     if [[ "`which kubectl`" != "/usr/local/bin/kubectl" ]]; then
-        echo "Already installed kubectl yourself in non-standard location? please remove it"
+        set +x
+        echo "Already installed kubectl yourself? please remove"
+        echo "Used apt? remove it by 'sudo apt-get remove kubectl'"
+	echo "Simply installed it not in /usr/local/bin?"
+        echo "Then remove it with 'sudo rm `which kubectl`'"
         exit -1
     fi
     sudo rm /usr/local/bin/kubectl

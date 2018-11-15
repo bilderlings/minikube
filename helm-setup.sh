@@ -6,7 +6,9 @@ if [ -x "$(command -v helm)" ]; then
     echo "Helm already exists, performing re-install"
     if [[ "`which helm`" != "/usr/local/bin/helm" ]]; then
         set +x
-        echo "Already installed helm yourself in non-standard location? please remove it"
+        echo "Already installed helm yourself? please remove it"
+        echo "Used apt? please run 'sudo apt remove helm'"
+        echo "Simply installed it not in /usr/local/bin? please run 'sudo rm `which helm`'"
         exit -1
     fi
     sudo rm /usr/local/bin/helm
@@ -15,7 +17,9 @@ if [ -x "$(command -v tiller)" ]; then
     echo "Tiller already exists, performing re-install"
     if [[ "`which tiller`" != "/usr/local/bin/tiller" ]]; then
         set +x
-        echo "Already installed tiller yourself in non-standard location? please remove it"
+        echo "Already installed tiller yourself? please remove it"
+        echo "Used apt? please run 'sudo apt remove tiller'"
+        echo "Simply installed it not in /usr/local/bin? please run 'sudo rm `which tiller`'"
         exit -1
     fi
     sudo rm /usr/local/bin/tiller
