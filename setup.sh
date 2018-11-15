@@ -2,11 +2,18 @@
 set -x
 set -e
 
+if [[ "`gcc --version`" != *ubuntu* ]]
+then
+    set +x
+    echo "Docker auto-install works on ubuntu only, sorry mac-ers and non-ubunters"
+    exit -1
+fi
+
 sudo apt-get update
 
 if [ -x "$(command -v docker)" ]; then
     echo "Docker exists, skip installation"
-    if [[ "`docker --version`" != *18.06.0* ]]
+    if [[ "`docker --version`" != *18.06.1* ]]
     then
         set +x
         echo "Your docker version is not 18.06.0 CE: `docker --version` please upgrade/downgrade yourself"
@@ -14,23 +21,17 @@ if [ -x "$(command -v docker)" ]; then
         echo "sudo service docker stop"
         echo "sudo rm -fr /var/lib/docker"
         echo "sudo apt-get remove docker-ce"
-        echo "sudo apt-get install docker-ce=18.06.0~ce~3-0~ubuntu"
+        echo "sudo apt-get install docker-ce=18.06.1~ce~3-0~ubuntu"
         exit -1
     fi
 else
     echo "Install docker requirements"
     sudo apt-get install apt-transport-https ca-certificates curl software-properties-common
     echo "install docker repo"
-    if [[ "`gcc --version`" != *ubuntu* ]]
-    then
-        set +x
-        echo "Docker auto-install works on ubuntu only, please install docker-ce 18.0.6 yourself."
-        exit -1
-    fi
     curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -
     sudo add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu bionic stable"
     sudo apt-get update
-    sudo apt-get install docker-ce=18.06.0~ce~3-0~ubuntu
+    sudo apt-get install docker-ce=18.06.1~ce~3-0~ubuntu
 fi
 
 echo "Starting minikube installation"
