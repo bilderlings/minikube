@@ -108,6 +108,7 @@ sudo minikube addons enable ingress
 
 echo "#!/usr/bin/env bash" >$HOME/minikube-ctx.sh
 echo "export KUBECONFIG=$HOME/.kube/config.minikube" >>$HOME/minikube-ctx.sh
+echo "export KUBECONTEXT=minikube" >>$HOME/minikube-ctx.sh
 chmod +x $HOME/minikube-ctx.sh
 set +x
 >&2 echo "minikube setup was successfull, please run ~/minikube-ctx.sh before you will use kubectl, it will set your context accordingly"
