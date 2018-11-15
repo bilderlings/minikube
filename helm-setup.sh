@@ -36,7 +36,7 @@ curl https://storage.googleapis.com/kubernetes-helm/$HELM_RELEASE.tar.gz --outpu
 helm init --upgrade
 
 set +x
->&2 echo "Successfully setted up helm, please execute ~/minikube-ctx.sh and then helm --help to start using it."
+>&2 echo "Successfully setted-up helm, please execute ~/minikube-ctx.sh and then helm --help to start using it."
 set -x
 
 
