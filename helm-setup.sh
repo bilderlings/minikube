@@ -40,8 +40,8 @@ curl https://storage.googleapis.com/kubernetes-helm/$HELM_RELEASE.tar.gz --outpu
 ~/minikube-ctx.sh
 
 helm init --upgrade
-
-kubectl wait --timeout=60s --for condition=ready  pod -n kube-system -l name=tiller
+kubectl rollout status -w deployment/tiller-deploy --namespace=kube-system
+#kubectl wait --timeout=60s --for condition=ready  pod -n kube-system -l name=tiller
 
 set +x
 >&2 echo "Successfully setted-up helm, please execute ~/minikube-ctx.sh and then helm --help to start using it."
