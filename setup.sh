@@ -170,7 +170,7 @@ echo "#!/usr/bin/env bash" >$HOME/minikube-ctx.sh
 echo "set -x" >>$HOME/minikube-ctx.sh
 echo "export KUBECONFIG=$HOME/.kube/config.minikube" >>$HOME/minikube-ctx.sh
 echo "export KUBECONTEXT=minikube" >>$HOME/minikube-ctx.sh
-echo "export KUBENAMESPACE=default" >>$HOME/minikube-ctx.sh
+echo "export KUBENAMESPACE=minikube" >>$HOME/minikube-ctx.sh
 echo "export CONFIG_SUFFIX=minikube" >>$HOME/minikube-ctx.sh
 echo "set +x" >>$HOME/minikube-ctx.sh
 
