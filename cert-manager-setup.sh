@@ -43,6 +43,7 @@ EOF
 set +x
 >&2 echo "Successfully setted-up cert-manager"
 >&2 echo "PLEASE INSTALL & ACCEPT THIS CA CERT IN YOUR BROWSER: $HOME/minikube-ca.crt"
+>&2 echo "PLEASE reload your context by executing 'source ~/minikube-ctx.sh'"
 set -x
 
 
