@@ -24,7 +24,6 @@ then
 else
     UBUNTU=1
     sudo apt update
-    sudo apt-get update
     # install hidden deps of kubectl
     sudo apt-get install socat
 fi
