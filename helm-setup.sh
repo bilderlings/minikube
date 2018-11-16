@@ -63,7 +63,7 @@ helm init --upgrade
 kubectl rollout status -w deployment/tiller-deploy --namespace=kube-system
 
 set +x
->&2 echo "Successfully setted-up helm, please execute ~/minikube-ctx.sh and then helm --help to start using it."
+>&2 echo "Successfully setted-up helm, please execute `source ~/minikube-ctx.sh` and then helm --help to start using it."
 set -x
 
 

@@ -160,5 +160,5 @@ spec:
 EOF
 
 set +x
->&2 echo "minikube setup was successfull, please run ~/minikube-ctx.sh before you will use kubectl, it will set your context accordingly"
+>&2 echo "minikube setup was successfull, please run 'source ~/minikube-ctx.sh' before you will use kubectl, it will set your context accordingly"
 set -x
