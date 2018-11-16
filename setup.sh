@@ -23,6 +23,7 @@ then
     set -x
 else
     UBUNTU=1
+    sudo apt update
     sudo apt-get update
     # install hidden deps of kubectl
     sudo apt-get install socat
@@ -39,8 +40,16 @@ if [ -x "$(command -v docker)" ]; then
         echo "sudo rm -fr /var/lib/docker"
         echo "sudo apt-get remove docker-ce"
         echo "sudo apt-get install docker-ce=$DOCKER_VERSION_UBUNTU"
-        echo "Close & Open your current terminal after this is done, and rerun make"
-        exit -1
+        read -p "Are you ready to proceed (y/n)? " answer
+        case ${answer:0:1} in
+            y|Y )
+                echo Yes
+            ;;
+            * )
+                exit -1
+            ;;
+        esac
+        set -x
     fi
 elif [ "$UBUNTU" -eq 1 ]; then
     echo "Install docker requirements"
@@ -53,19 +62,26 @@ elif [ "$UBUNTU" -eq 1 ]; then
 fi
 
 echo "Starting minikube installation"
-
+OWNMINIKUBE=0
 if [ -x "$(command -v minikube)" ]; then
     echo "Minikube already exists, performing re-install"
     if [[ "`which minikube`" != "/usr/local/bin/minikube" ]]; then
         set +x
-        echo "Already installed minikube yourself in non-standard location or with apt? please remove it"
-        echo "Used apt? then please run `sudo apt remove minikube`"
-        echo "Simply installed it not in /usr/local/bin?"
-        echo "Please run 'sudo rm `which minikube`'"
-        echo "Close & Open your current terminal after this is done and rerun make"
-        exit -1
+        echo "Already installed minikube yourself?"
+        echo "Make sure it is up to date"
+        read -p "Are you ready to proceed (y/n)? " answer
+        case ${answer:0:1} in
+            y|Y )
+                echo Yes
+            ;;
+            * )
+                exit -1
+            ;;
+        esac
+        OWNMINIKUBE=1
+        set -x
     fi
-    read -p "Going to wipe out your existing minikube installation and settings (y/n)? " answer
+    read -p "Going to wipe out your existing minikube settings (y/n)? " answer
     case ${answer:0:1} in
         y|Y )
             echo Yes
@@ -85,32 +101,46 @@ if [ -x "$(command -v minikube)" ]; then
     sudo systemctl stop '*kubelet*.mount'
     sudo rm -fr /var/lib/kubelet
     sudo rm -rf /etc/kubernetes/
-    sudo rm /usr/local/bin/minikube
+    sudo rm /usr/local/bin/minikube || true
     sudo rm -fr /var/minikube
 fi
 
+OWNKUBECTL=0
 if [ -x "$(command -v kubectl)" ]; then
     echo "Kubectl already exists, performing re-install"
     if [[ "`which kubectl`" != "/usr/local/bin/kubectl" ]]; then
         set +x
-        echo "Already installed kubectl yourself? please remove"
-        echo "Used apt? remove it by 'sudo apt-get remove kubectl'"
-	echo "Simply installed it not in /usr/local/bin?"
-        echo "Then remove it with 'sudo rm `which kubectl`'"
-        echo "Close & Open your current terminal after this is done"
-        exit -1
+        echo "Already installed kubectl yourself?"
+        echo "Please make sure it is at latest version"
+        echo "Make sure it is up to date"
+        read -p "Are you ready to proceed (y/n)? " answer
+        case ${answer:0:1} in
+            y|Y )
+                echo Yes
+            ;;
+            * )
+                exit -1
+            ;;
+        esac
+        OWNKUBECTL=1
+        set +x
     fi
-    sudo rm /usr/local/bin/kubectl
+    sudo rm /usr/local/bin/kubectl || true
 fi
 
+if [ "$OWNMINIKUBE" -eq 0 ]; then
 curl -Lo minikube https://github.com/kubernetes/minikube/releases/download/v0.30.0/minikube-linux-amd64 && \
  chmod +x minikube && \
  sudo cp minikube /usr/local/bin/ && \
  rm minikube
+fi
+
+if [ "$OWNKUBECTL" -eq 0 ]; then
 curl -Lo kubectl https://storage.googleapis.com/kubernetes-release/release/v1.12.2/bin/linux/amd64/kubectl && \
  chmod +x kubectl && \
  sudo cp kubectl /usr/local/bin/ && \
  rm kubectl
+fi
 
 export MINIKUBE_WANTUPDATENOTIFICATION=false
 export MINIKUBE_WANTREPORTERRORPROMPT=false

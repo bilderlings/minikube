@@ -5,18 +5,27 @@ set -e
 # Load minikube context
 . "$HOME/minikube-ctx.sh"
 
+OWNHELM=0
 if [ -x "$(command -v helm)" ]; then
     echo "Helm already exists, performing re-install"
     if [[ "`which helm`" != "/usr/local/bin/helm" ]]; then
         set +x
-        echo "Already installed helm yourself? please remove it"
-        echo "Used apt? please run 'sudo apt remove helm'"
-        echo "Simply installed it not in /usr/local/bin? please run 'sudo rm `which helm`'"
-        echo "Close & Open your current terminal after this is done"
-        exit -1
+        echo "Already installed helm yourself?"
+        echo "Please make sure it is up to date"
+        read -p "Are you ready to proceed (y/n)? " answer
+        case ${answer:0:1} in
+            y|Y )
+                echo Yes
+            ;;
+            * )
+                exit -1
+            ;;
+        esac
+        OWNHELM=1
+        set -x
     fi
 
-    read -p "Going to wipe out your existing helm installation and settings (y/n)? " answer
+    read -p "Going to wipe out your existing helm settings (y/n)? " answer
     case ${answer:0:1} in
         y|Y )
             echo Yes
@@ -25,20 +34,29 @@ if [ -x "$(command -v helm)" ]; then
             exit -1
         ;;
     esac
-    sudo rm /usr/local/bin/helm
+    sudo rm /usr/local/bin/helm || true
     sudo rm -fr "$HOME/.helm" || true
 fi
+OWNTILLER=0
 if [ -x "$(command -v tiller)" ]; then
     echo "Tiller already exists, performing re-install"
     if [[ "`which tiller`" != "/usr/local/bin/tiller" ]]; then
         set +x
-        echo "Already installed tiller yourself? please remove it"
-        echo "Used apt? please run 'sudo apt remove tiller'"
-        echo "Simply installed it not in /usr/local/bin? please run 'sudo rm `which tiller`'"
-        echo "Close & Open your current termina after this is done"
-        exit -1
+        echo "Already installed tiller yourself?"
+        echo "Please make sure it is up to date"
+        read -p "Are you ready to proceed (y/n)? " answer
+        case ${answer:0:1} in
+            y|Y )
+                echo Yes
+            ;;
+            * )
+                exit -1
+            ;;
+        esac
+        OWNTILLER=1
+        set -x
     fi
-    read -p "Going to wipe out your existing tiller installation and settings (y/n)? " answer
+    read -p "Going to wipe out your existing tiller settings (y/n)? " answer
     case ${answer:0:1} in
         y|Y )
             echo Yes
@@ -47,17 +65,19 @@ if [ -x "$(command -v tiller)" ]; then
             exit -1
         ;;
     esac
-    sudo rm /usr/local/bin/tiller
+    sudo rm /usr/local/bin/tiller || true
 fi
 
 
 HELM_RELEASE=helm-v2.11.0-linux-amd64
 
+if [ $OWNHELM -eq 0 && $OWNTILLER -eq 0 ]; then
 curl https://storage.googleapis.com/kubernetes-helm/$HELM_RELEASE.tar.gz --output $HELM_RELEASE.tar.gz && \
  tar -xzvf $HELM_RELEASE.tar.gz && \
  sudo cp linux-amd64/helm /usr/local/bin/helm && \
  sudo cp linux-amd64/tiller /usr/local/bin/tiller && \
  rm -fr linux-amd64 && rm -fr $HELM_RELEASE.tar.gz
+fi
 
 helm init --upgrade
 kubectl rollout status -w deployment/tiller-deploy --namespace=kube-system
@@ -65,5 +85,3 @@ kubectl rollout status -w deployment/tiller-deploy --namespace=kube-system
 set +x
 >&2 echo "Successfully setted-up helm, please execute `source ~/minikube-ctx.sh` and then helm --help to start using it."
 set -x
-
-
