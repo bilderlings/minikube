@@ -71,7 +71,7 @@ fi
 
 HELM_RELEASE=helm-v2.11.0-linux-amd64
 
-if [ $OWNHELM -eq 0 ] && [ $OWNTILLER -eq 0 ]; then
+if [[ $OWNHELM -eq 0 ]] && [[ $OWNTILLER -eq 0 ]]; then
 curl https://storage.googleapis.com/kubernetes-helm/$HELM_RELEASE.tar.gz --output $HELM_RELEASE.tar.gz && \
  tar -xzvf $HELM_RELEASE.tar.gz && \
  sudo cp linux-amd64/helm /usr/local/bin/helm && \

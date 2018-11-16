@@ -89,8 +89,8 @@ if [ -x "$(command -v minikube)" ]; then
             exit -1
         ;;
     esac
-    # minikube has no uninstaller, thats why below:)
-    # if you will delete any of the following minikube will fail to reinstall:) super Resilient!
+    # minikube has no uninstaller:)
+    # if you will delete any of the following, minikube will fail to reinstall:) super Resilient!
     sudo minikube stop || true
     sudo minikube delete || true
     sudo rm -fr $HOME/.minikube || true
