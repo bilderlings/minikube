@@ -100,7 +100,7 @@ if [ -x "$(command -v minikube)" ]; then
     sudo systemctl stop '*kubelet*.mount'
     sudo rm -fr /var/lib/kubelet
     sudo systemctl stop kubelet.service || true
-    CONTAINERS=`sudo docker ps -a | grep "[ ]k8s_" | awk '{print $1}'
+    CONTAINERS=`sudo docker ps -a | grep "[ ]k8s_" | awk '{print $1}'`
     sudo docker stop "$CONTAINERS" || true
     sudo docker rm "$CONTAINERS" || true
     sudo rm -rf /etc/kubernetes/
