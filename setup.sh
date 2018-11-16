@@ -140,6 +140,8 @@ sudo minikube addons enable ingress
 echo "#!/usr/bin/env bash" >$HOME/minikube-ctx.sh
 echo "export KUBECONFIG=$HOME/.kube/config.minikube" >>$HOME/minikube-ctx.sh
 echo "export KUBECONTEXT=minikube" >>$HOME/minikube-ctx.sh
+echo "export KUBENAMESPACE=default" >>$HOME/minikube-ctx.sh
+
 chmod +x $HOME/minikube-ctx.sh
 
 kubectl delete --namespace default PersistentVolume minikube-pv || true
