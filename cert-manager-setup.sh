@@ -16,7 +16,7 @@ helm install --wait \
     stable/cert-manager
 
 # time ti setup CA certs
-COMMON_NAME="minikube.k8s.iamoffice.lv"
+COMMON_NAME="minikube-ca.k8s.iamoffice.lv"
 if [ -f "$HOME/minikube-ca.key" ]; then
    echo "minikube CA cert exists, will be using it"
 else
