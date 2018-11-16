@@ -101,8 +101,8 @@ if [ -x "$(command -v minikube)" ]; then
     sudo rm -fr /var/lib/kubelet
     sudo systemctl stop kubelet.service || true
     CONTAINERS=`sudo docker ps -a | grep "[ ]k8s_" | awk '{print $1}'
-    sudo docker stop "$CONTAINERS"
-    sudo docker rm "$CONTAINERS"
+    sudo docker stop "$CONTAINERS" || true
+    sudo docker rm "$CONTAINERS" || true
     sudo rm -rf /etc/kubernetes/
     sudo rm /usr/local/bin/minikube || true
     sudo rm -fr /var/minikube
