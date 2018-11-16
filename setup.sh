@@ -138,9 +138,11 @@ sudo minikube addons enable ingress
 # install helm
 
 echo "#!/usr/bin/env bash" >$HOME/minikube-ctx.sh
+echo "set -x" >>$HOME/minikube-ctx.sh
 echo "export KUBECONFIG=$HOME/.kube/config.minikube" >>$HOME/minikube-ctx.sh
 echo "export KUBECONTEXT=minikube" >>$HOME/minikube-ctx.sh
 echo "export KUBENAMESPACE=default" >>$HOME/minikube-ctx.sh
+echo "set +x" >>$HOME/minikube-ctx.sh
 
 chmod +x $HOME/minikube-ctx.sh
 
