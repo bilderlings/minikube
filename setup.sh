@@ -9,8 +9,8 @@ if [[ "`gcc --version`" != *ubuntu* ]]
 then
     set +x
     echo "Docker auto-install works on ubuntu only, sorry"
-    echo "1) Please install docker $DOKER_VERSION~ce version by whatever means you want"
-    echo "2) Install latest version of socat"
+    echo "1) Please install YOURSELF docker $DOKER_VERSION~ce version by whatever means you want"
+    echo "2) Install latest YOURSELF version of socat"
     read -p "Are you ready to proceed (y/n)? " answer
     case ${answer:0:1} in
         y|Y )
