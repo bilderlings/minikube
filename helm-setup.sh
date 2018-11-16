@@ -2,6 +2,9 @@
 set -x
 set -e
 
+# Load minikube context
+~/minikube-ctx.sh
+
 if [ -x "$(command -v helm)" ]; then
     echo "Helm already exists, performing re-install"
     if [[ "`which helm`" != "/usr/local/bin/helm" ]]; then
@@ -23,7 +26,7 @@ if [ -x "$(command -v helm)" ]; then
         ;;
     esac
     sudo rm /usr/local/bin/helm
-    sudo rm -fr /home/vkorehovs/.helm || true
+    sudo rm -fr "$HOME/.helm" || true
 fi
 if [ -x "$(command -v tiller)" ]; then
     echo "Tiller already exists, performing re-install"
@@ -55,9 +58,6 @@ curl https://storage.googleapis.com/kubernetes-helm/$HELM_RELEASE.tar.gz --outpu
  sudo cp linux-amd64/helm /usr/local/bin/helm && \
  sudo cp linux-amd64/tiller /usr/local/bin/tiller && \
  rm -fr linux-amd64 && rm -fr $HELM_RELEASE.tar.gz
-
-# Load minikube context
-~/minikube-ctx.sh
 
 helm init --upgrade
 kubectl rollout status -w deployment/tiller-deploy --namespace=kube-system
