@@ -7,13 +7,13 @@ spec:
   issuerRef:
     name: letsencrypt
     kind: ClusterIssuer
-  commonName: "swagger.minikube.iamoffice.lv"
+  commonName: "swagger.minikube.k8s.iamoffice.lv"
   dnsNames:
-  - "swagger.minikube.iamoffice.lv"
+  - "swagger.minikube.k8s.iamoffice.lv"
   acme:
     config:
     - dns01:
         provider: cloudflare
       domains:
-      - "swagger.minikube.iamoffice.lv"
+      - "swagger.minikube.k8s.iamoffice.lv"
 

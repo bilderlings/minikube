@@ -142,11 +142,6 @@ echo "export KUBECONFIG=$HOME/.kube/config.minikube" >>$HOME/minikube-ctx.sh
 echo "export KUBECONTEXT=minikube" >>$HOME/minikube-ctx.sh
 chmod +x $HOME/minikube-ctx.sh
 
-kubectl delete --namespace kube-system secret ca-key-pair || true
-kubectl create --namespace kube-system secret tls ca-key-pair \
-   --cert="$HOME/minikube-ca.crt" \
-   --key="$HOME/minikube-ca.key"
-
 kubectl delete --namespace default PersistentVolume minikube-pv || true
 kubectl create --namespace default -f - << EOF
 kind: PersistentVolume
