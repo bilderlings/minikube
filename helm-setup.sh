@@ -7,7 +7,7 @@ set -e
 
 OWNHELM=0
 if [ -x "$(command -v helm)" ]; then
-    echo "Helm already exists, performing re-install"
+    echo "Helm already exists"
     if [[ "`which helm`" != "/usr/local/bin/helm" ]]; then
         set +x
         echo "Already installed helm yourself?"
@@ -39,7 +39,7 @@ if [ -x "$(command -v helm)" ]; then
 fi
 OWNTILLER=0
 if [ -x "$(command -v tiller)" ]; then
-    echo "Tiller already exists, performing re-install"
+    echo "Tiller already exists"
     if [[ "`which tiller`" != "/usr/local/bin/tiller" ]]; then
         set +x
         echo "Already installed tiller yourself?"

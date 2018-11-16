@@ -63,7 +63,7 @@ fi
 echo "Starting minikube installation"
 OWNMINIKUBE=0
 if [ -x "$(command -v minikube)" ]; then
-    echo "Minikube already exists, performing re-install"
+    echo "Minikube already exists"
     if [[ "`which minikube`" != "/usr/local/bin/minikube" ]]; then
         set +x
         echo "Already installed minikube yourself?"
@@ -106,7 +106,7 @@ fi
 
 OWNKUBECTL=0
 if [ -x "$(command -v kubectl)" ]; then
-    echo "Kubectl already exists, performing re-install"
+    echo "Kubectl already exists"
     if [[ "`which kubectl`" != "/usr/local/bin/kubectl" ]]; then
         set +x
         echo "Already installed kubectl yourself?"
