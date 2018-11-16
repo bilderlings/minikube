@@ -3,7 +3,7 @@ set -x
 set -e
 
 # Load minikube context
-~/minikube-ctx.sh
+. "$HOME/minikube-ctx.sh"
 
 helm del --purge cert-manager || true
 kubectl delete customresourcedefinitions.apiextensions.k8s.io certificates.certmanager.k8s.io || true

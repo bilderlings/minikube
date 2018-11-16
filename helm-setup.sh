@@ -3,7 +3,7 @@ set -x
 set -e
 
 # Load minikube context
-~/minikube-ctx.sh
+. "$HOME/minikube-ctx.sh"
 
 if [ -x "$(command -v helm)" ]; then
     echo "Helm already exists, performing re-install"
