@@ -90,10 +90,11 @@ if [ -x "$(command -v minikube)" ]; then
         ;;
     esac
     # minikube has no uninstaller:)
-    # if you will delete any of the following, minikube will fail to reinstall:) super Resilient!
+    # if you will skip any of the following, minikube will fail to reinstall:) super Resilient!
     sudo minikube stop || true
     sudo minikube delete || true
     sudo rm -fr $HOME/.minikube || true
+    sudo rm -fr /var/lib/minikube || true
     sudo rm -fr /data/minikube || true
     sudo rm -fr $HOME/.kube/config.minikube || true
     sudo rm -fr /var/lib/kubeadm.yaml
@@ -104,8 +105,10 @@ if [ -x "$(command -v minikube)" ]; then
     sudo docker stop "$CONTAINERS" || true
     sudo docker rm "$CONTAINERS" || true
     sudo rm -rf /etc/kubernetes/
+    sudo rm -fr /var/minikube # our OWN data folder
+fi
+if [ $OWNMINIKUBE -eq 0 ]; then
     sudo rm /usr/local/bin/minikube || true
-    sudo rm -fr /var/minikube
 fi
 
 OWNKUBECTL=0
