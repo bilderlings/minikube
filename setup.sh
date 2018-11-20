@@ -3,7 +3,7 @@ set -x
 set -e
 
 UBUNTU=0
-DOKER_VERSION=18.06.1
+DOKER_VERSION=18.
 DOCKER_VERSION_UBUNTU=18.06.1~ce~3-0~ubuntu
 if [[ "`gcc --version`" != *ubuntu* ]]
 then
@@ -101,9 +101,9 @@ if [ -x "$(command -v minikube)" ]; then
     sudo systemctl stop '*kubelet*.mount'
     sudo rm -fr /var/lib/kubelet
     sudo systemctl stop kubelet.service || true
-    CONTAINERS="`sudo docker ps -a | grep '[ ]k8s_' | awk '{print $1}'`"
-    sudo docker stop "$CONTAINERS" || true
-    sudo docker rm "$CONTAINERS" || true
+    CONTAINERS="`sudo docker ps -qa | grep '[ ]k8s_' | awk '{print $1}'`"
+    sudo docker stop $CONTAINERS || true
+    sudo docker rm $CONTAINERS || true
     sudo rm -rf /etc/kubernetes/
     sudo rm -fr /var/minikube # our OWN data folder
 fi
