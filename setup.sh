@@ -114,8 +114,7 @@ if [ -x "$(command -v kubectl)" ]; then
     if [[ "`which kubectl`" != "/usr/local/bin/kubectl" ]]; then
         set +x
         echo "Already installed kubectl yourself?"
-        echo "Please make sure it is at latest version"
-        echo "Make sure it is up to date"
+        echo "Please make sure it is at LATEST version"
         read -p "Are you ready to proceed (y/n)? " answer
         case ${answer:0:1} in
             y|Y )
@@ -125,10 +124,11 @@ if [ -x "$(command -v kubectl)" ]; then
                 exit -1
             ;;
         esac
-        OWNKUBECTL=1
         set +x
+        OWNKUBECTL=1
+    else
+        sudo rm /usr/local/bin/kubectl || true
     fi
-    sudo rm /usr/local/bin/kubectl || true
 fi
 
 if [ "$OWNMINIKUBE" -eq 0 ]; then

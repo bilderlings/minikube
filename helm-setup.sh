@@ -21,8 +21,10 @@ if [ -x "$(command -v helm)" ]; then
                 exit -1
             ;;
         esac
-        OWNHELM=1
         set -x
+        OWNHELM=1
+    else
+        sudo rm /usr/local/bin/helm || true
     fi
 
     read -p "Going to wipe out your existing helm settings (y/n)? " answer
@@ -34,7 +36,6 @@ if [ -x "$(command -v helm)" ]; then
             exit -1
         ;;
     esac
-    sudo rm /usr/local/bin/helm || true
     sudo rm -fr "$HOME/.helm" || true
 fi
 OWNTILLER=0
@@ -53,19 +54,11 @@ if [ -x "$(command -v tiller)" ]; then
                 exit -1
             ;;
         esac
-        OWNTILLER=1
         set -x
+        OWNTILLER=1
+    else
+        sudo rm /usr/local/bin/tiller || true
     fi
-    read -p "Going to wipe out your existing tiller settings (y/n)? " answer
-    case ${answer:0:1} in
-        y|Y )
-            echo Yes
-        ;;
-        * )
-            exit -1
-        ;;
-    esac
-    sudo rm /usr/local/bin/tiller || true
 fi
 
 
